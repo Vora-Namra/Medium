@@ -11,7 +11,6 @@ const Blog = () => {
 
     <Appbar />
     
-    {/* Full screen spinner */}
     <div className='flex justify-center items-center h-screen'>
       <Spinner/>
     </div>

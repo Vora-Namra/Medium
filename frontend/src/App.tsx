@@ -20,6 +20,7 @@ function App() {
           <Route path="/publish" element={<Publish />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/" element={<Landing />} />
+          <Route path="*" element={<Landing />} />
         </Routes>
       </BrowserRouter>
     </>
