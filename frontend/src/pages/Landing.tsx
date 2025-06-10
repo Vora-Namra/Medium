@@ -104,7 +104,7 @@ export default function Landing() {
       <Appbar />
 
       {/* Hero Section */}
-      <header className="flex flex-col justify-center items-center px-6 py-20 bg-[radial-gradient(ellipse_at_top,_#23272f_0%,_#f4f5fa_95%)]">
+    <header className="flex flex-col justify-center items-center px-6 py-20 bg-[radial-gradient(ellipse_at_top,_#f4f5fa_0%,_#23272f_100%)]">
         <h1 className="text-5xl md:text-7xl font-extrabold mb-6 text-center tracking-tight bg-gradient-to-br from-black via-gray-900 to-gray-500 bg-clip-text text-transparent">
           Discover your{" "}
           <span className="inline-block bg-black text-white px-3 py-1 rounded shadow">

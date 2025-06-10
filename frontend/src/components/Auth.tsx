@@ -10,52 +10,57 @@ import "react-toastify/dist/ReactToastify.css";
 
 export const Auth = ({type}:{type:"signup"| "signin"}) => {
     const navigate = useNavigate();
+      const [loading, setLoading] = useState(false); 
+
+
     const [postInputs,setPostInputs] = useState<SignupInput>({
         name:"",
         username:"",
         password:""
     });
-
-async function sendRequest() {
+  async function sendRequest() {
+    setLoading(true); 
     try {
-        const response = await axios.post(
-            `${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`,
-            postInputs,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
-        );
-        const jwt = response.data.token;
-        localStorage.setItem("token", jwt);
-        const data = axios.get(`${BACKEND_URL}/api/v1/user/profile`, {
-            headers: {      
-                Authorization: jwt,
-            },
-        });
-        const user = (await data).data.user;
-        localStorage.setItem("userdata", JSON.stringify(user));
-        toast.success(`${type === "signup" ? "Signup" : "Signin"} successful!`, {
-            position: "top-center",
-              className: "toast-black-white",
-            autoClose: 2000,
-        });
+      const response = await axios.post(
+        `${BACKEND_URL}/api/v1/user/${type}`,
+        postInputs,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      const jwt = response.data.token;
+      localStorage.setItem('token', jwt);
 
-        setTimeout(() => navigate("/blogs"), 1500);
+      const data = await axios.get(`${BACKEND_URL}/api/v1/user/profile`, {
+        headers: {
+          Authorization: jwt,
+        },
+      });
 
+      const user = data.data.user;
+      localStorage.setItem('userdata', JSON.stringify(user));
+
+      toast.success(`${type === 'signup' ? 'Signup' : 'Signin'} successful!`, {
+        position: 'top-center',
+        className: 'toast-black-white',
+        autoClose: 2000,
+      });
+
+      setTimeout(() => navigate('/blogs'), 1500);
     } catch (err: any) {
-        console.error(err);
-        const errorMessage = err?.response?.data?.message || "Something went wrong!";
-        toast.error(errorMessage, {
-            position: "top-center",
-            className: "toast-black-white",
-            autoClose: 3000,
-        });
+      console.error(err);
+      const errorMessage = err?.response?.data?.message || 'Something went wrong!';
+      toast.error(errorMessage, {
+        position: 'top-center',
+        className: 'toast-black-white',
+        autoClose: 3000,
+      });
+    } finally {
+      setLoading(false); 
     }
-}
-
-    
+  }
       
 
    return (
@@ -106,8 +111,24 @@ async function sendRequest() {
         }))
     }} />
 
-<button type="button" onClick={sendRequest} className="text-white bg-gray-800 w-full mt-9 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">{type === "signup" ? "Signup":"Signin"}</button>
-
+            <button
+                type="button"
+                onClick={sendRequest}
+                disabled={loading} 
+                className={`text-white w-full mt-9 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 ${
+                  loading
+                    ? 'bg-gray-500 cursor-not-allowed'
+                    : 'bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300'
+                }`}
+              >
+                {loading
+                  ? type === 'signup'
+                    ? 'Signing up...'
+                    : 'Signing in...'
+                  : type === 'signup'
+                  ? 'Signup'
+                  : 'Signin'}
+              </button>
     </div>
     </div>
     </div>
